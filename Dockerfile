@@ -3,7 +3,9 @@ FROM oven/bun:alpine
 WORKDIR /tests
 
 COPY package.json ./
-RUN bun install --production
+RUN apk upgrade --no-cache && \
+    bun install --production && \
+    rm -rf /root/.bun/install/cache
 
 ENV PATH="/tests/node_modules/.bin:${PATH}"
 
