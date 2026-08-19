@@ -44,7 +44,26 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build image (no push)
+        if: steps.existing.outputs.skip == 'false'
+        uses: docker/build-push-action@v6
+        with:
+          load: true
+          tags: c05m4r/newman:smoke
+
+      - name: Smoke test against JSONPlaceholder
+        if: steps.existing.outputs.skip == 'false'
+        run: |
+          docker run --rm \
+            -v "$PWD/smoke:/smoke" \
+            c05m4r/newman:smoke run /smoke/JSONPlaceholder.postman_collection.json \
+            -r htmlextra \
+            --reporter-htmlextra-export /smoke/report.html
+          test -s smoke/report.html
+          grep -qi "<html" smoke/report.html
+          echo "Smoke test OK — report generated"
+
+      - name: Push to Docker Hub
         if: steps.existing.outputs.skip == 'false'
         uses: docker/build-push-action@v6
         with:

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "newman": "^6.2.1",
-    "newman-reporter-htmlextra": "^1.23.1"
+    "newman": "latest",
+    "newman-reporter-htmlextra": "latest"
   }
 }
