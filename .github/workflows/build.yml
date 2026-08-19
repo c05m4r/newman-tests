@@ -12,11 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Resolve latest versions from npm
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Resolve latest versions from registry
         id: versions
         run: |
-          NEWMAN=$(npm view newman version)
-          HTMLEXTRA=$(npm view newman-reporter-htmlextra version)
+          NEWMAN=$(bun pm view newman version)
+          HTMLEXTRA=$(bun pm view newman-reporter-htmlextra version)
           echo "newman=$NEWMAN" >> "$GITHUB_OUTPUT"
           echo "htmlextra=$HTMLEXTRA" >> "$GITHUB_OUTPUT"
 
